@@ -48,8 +48,6 @@ def confusion_matrix(df_list, fan, age):
 				else:
 					#FN
 					matrix[0][1] += 1
-
-	print "MATRIX",matrix[1][1]
 	
 	if fan == 'lf':
 		if age == 'young':
@@ -57,14 +55,14 @@ def confusion_matrix(df_list, fan, age):
 						float(matrix[0][0])/12,
 						float(matrix[1][0])/12,
 						median(tp_time),
-						median(tn_time)
+						0#median(tn_time)
 					]
 		else:
 			final = [
 						float(matrix[0][0])/12,
 						float(matrix[1][0])/12,
 						median(tp_time),
-						median(tn_time)
+						0#median(tn_time)
 					]
 	if fan == 'hf':
 		if age == 'older':
@@ -72,26 +70,25 @@ def confusion_matrix(df_list, fan, age):
 						float(matrix[0][0])/12,
 						float(matrix[1][0])/12, 
 						median(tp_time),
-						median(tn_time)
+						0#median(tn_time)
 					]
 		else:
 			final = [
 						float(matrix[0][0])/12,
 						float(matrix[1][0])/12,
 						median(tp_time),
-						median(tn_time)
+						0#median(tn_time)
 					]	
 	
 	#final, TP, FP
-	print "MATRIX",matrix[1][1]
 	return final, matrix[0][0], matrix[1][0]
 
 def main():
 	#subject's data
-	subject_data = list(csv.reader(open('/Users/almaskebekbayev/Dropbox/Exp 1 Face Fan Data/Face Fan Age/Data/s001RL.txt', 'rb'), delimiter='\t'))
+	subject_data = list(csv.reader(open('/path/to/<file>.txt', 'rb'), delimiter='\t'))
 
 	#master data
-	master_test = DataFrame(pd.read_csv('/Users/almaskebekbayev/Dropbox/Exp 1 Face Fan Data/Face Fan Age/age-lists-3/s001/master-test.csv'))
+	master_test = DataFrame(pd.read_csv('/path/to/<file>.csv'))
 
 	df_data = DataFrame(subject_data[584:775:2])
 
@@ -107,32 +104,24 @@ def main():
 	df_data['status'] = master_test['age']
 	df_data['correct_test'] = master_test['test']
 
-
-	#print df_data.values
 	young_hf_data, young_hf_tp_total, young_hf_fp_total = confusion_matrix(df_list=df_data.values.tolist(), fan='hf', age='young')
 
-	"""
+	
 	young_lf_data, young_lf_tp_total, young_lf_fp_total = confusion_matrix(df_list=df_data.values.tolist(), fan='lf', age='young')
 	young_hf_data, young_hf_tp_total, young_hf_fp_total = confusion_matrix(df_list=df_data.values.tolist(), fan='hf', age='young')
 
-	#print young_lf_data, young_lf_tp_total, young_lf_fp_total, young_lf_tn_total
-	#print young_hf_data, young_hf_tp_total, young_hf_fp_total, young_hf_tn_total
-	
 	older_lf_data, older_lf_tp_total, older_lf_fp_total = confusion_matrix(df_list=df_data.values.tolist(), fan='lf', age='older')
 	older_hf_data, older_hf_tp_total, older_hf_fp_total = confusion_matrix(df_list=df_data.values.tolist(), fan='hf', age='older')
-	"""
 
-
-	"""
-	out = csv.writer(open('/Users/almaskebekbayev/Dropbox/stimuli_analysis/face_stimuli/output/s001RL.csv', 'w'), delimiter=',')
+	out = csv.writer(open('/path/to/output/<file>.csv', 'w'), delimiter=',')
 	
 	out.writerow(
 		sum(
 			[young_lf_data, young_hf_data, older_lf_data, older_hf_data,
-				[(young_lf_tp_total + young_hf_tp_total + older_lf_tp_total + older_hf_tp_total)/float(48)], #total TPs
+				[(young_lf_tp_total + young_hf_tp_total + older_lf_tp_total + older_hf_tp_total)/float(48)],
 				[(young_lf_fp_total + young_hf_fp_total + older_lf_fp_total + older_hf_fp_total)/float(48)]
 			], [])
-	) #total FPs
-	"""
+	) 
+	
 if __name__ == '__main__':
 	main()
